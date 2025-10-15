@@ -1,0 +1,23 @@
+{% extends "./base.html" %}
+{% block content %}
+<head><title>Browse Profiles</title></head>
+<h1>Browse Profiles</h1>
+<p>Welcome to the Browse Profiles page!</p>
+<!-- Search Form -->
+<form method="GET" action="{% url 'browse_profiles' %}">
+    <input type="text" name="q" placeholder="Search profiles..." value="{{ query }}">
+    <button type="submit">Search</button>
+</form>
+<!-- Display Search Results -->
+{% if users %}
+    <ul>
+        {% for user in users %}
+        <li>
+            <a class="enrolledList" href="{% url 'user_detail' user.pk %}">{{ user.username }}</a>
+        </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No profiles found.</p>
+{% endif %}
+{% endblock %}

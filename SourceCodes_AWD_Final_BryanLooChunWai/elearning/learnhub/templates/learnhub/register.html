@@ -1,0 +1,24 @@
+{% extends "./base.html" %}
+{% load django_bootstrap5 %}
+{% block content %}
+<div class="register-page">
+    <div class="register-container">
+        <h1>Register</h1>
+        {% if registered %}
+            <strong>Thank you for registering! Please <a href="{% url 'login' %}">log in</a>.</strong>
+        {% else %}
+            <strong>Register here</strong><br /><br />
+            <form id="user_form" method="post" action="{% url 'register' %}" enctype="multipart/form-data">
+                {% csrf_token %}
+                {% for field in registration_form %}
+                <div class="form-group">
+                    <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}:</label>
+                    {{ field }}
+                </div>
+                {% endfor %}
+                <button type="submit" class="submit-btn">Register</button>
+            </form>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

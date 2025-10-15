@@ -1,0 +1,26 @@
+{% extends "./base.html" %}
+{% block content %}
+<head><title>{{ user_detail.username }} profile page</title></head>
+<div class="segment">
+    <h1 class="pageTitle">{{ user_detail.username }}'s profile</h1>
+    {% if learnhub_user.profile_picture %}
+    <p><strong>Profile Picture:</strong></p>
+        <img src="{{ learnhub_user.profile_picture.url }}" alt="Profile Picture" width="150">
+    {% else %}
+    <p>No profile picture available.</p>
+    {% endif %}
+    <p><strong>Username:</strong> {{ user_detail.username }}</p>
+    <p><strong>Email:</strong> {{ user_detail.email }}</p>
+    <p><strong>First Name:</strong> {{ user_detail.first_name }}</p>
+    <p><strong>Last Name:</strong> {{ user_detail.last_name }}</p>
+    {% if learnhub_user %}
+        <p><strong>Organisation:</strong> {{ learnhub_user.organisation }}</p>
+        <p><strong>Role:</strong> 
+            {% if learnhub_user.is_student %} Student {% endif %}
+            {% if learnhub_user.is_teacher %} Teacher {% endif %}
+        </p>
+    {% else %}
+        <p>This user does not have a LearnHub profile.</p>
+    {% endif %}
+</div>
+{% endblock %}

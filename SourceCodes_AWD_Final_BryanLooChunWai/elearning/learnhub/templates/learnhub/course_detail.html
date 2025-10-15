@@ -1,0 +1,43 @@
+{% extends "./base.html" %}
+{% block content %}
+<head><title>{{ course.name }} - Course Details</title></head>
+<h1 class="courseTitle">{{ course.name }}</h1>
+<p class="courseDescription">{{ course.description }}</p>
+<!-- Add Resource Button (Visible Only to Teachers) -->
+{% if user == course.teacher %}
+    <a class="addResourceLink" href="{% url 'add_material' course.id %}">Add Resource</a>
+{% endif %}
+<div class="courseContent">
+    <h2>Course Resources:</h2>
+    <ul class="resource-list">
+        {% for material in course.materials.all %}
+            <li class="resource-item">
+                <div class="resource-content">
+                    <span class="resource-title"><strong>{{ material.title }}</strong></span>
+                    <p class="resource-description">{{ material.description }}</p>
+                </div>
+                <span class="resource-uploaded">{{ material.uploaded_at }}</span>
+                <p class="resource-link"><a href="{{ material.file.url }}" download>Download</a></p>
+            </li>
+        {% empty %}
+            <p>No resources added yet.</p>
+        {% endfor %}
+    </ul>
+    <h2>Enrolled Students:</h2>
+    {% if user.is_authenticated and user.learnhubuser.is_student %}
+    <!-- Join Course Button -->
+    <form action="{% url 'join_course' course.id %}" method="POST">
+        {% csrf_token %}
+        <button type="submit">Join Course</button>
+    </form>
+    {% else %}
+    {% endif %}
+    <ul>
+        {% for student in course.students.all %}
+            <li class="enrolledList">{{ student.username }}</li>
+        {% empty %}
+            <p class="enrolledList">No students enrolled in this course yet.</p>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

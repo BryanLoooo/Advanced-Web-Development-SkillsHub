@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>Chat Rooms</title>
+    <h1 class="chatsPage">Chats page</h1>
+</head>
+<body>
+    <style>
+        body{
+            background-color: black;
+        }
+        .chatTitle{
+            color:white;
+        }
+        .chatList{
+            color:white;
+            text-decoration: none;
+            list-style: none;
+        }
+        .chatsPage{
+            color: white;
+            text-align: center;
+            padding: 50px;
+        }
+    </style>
+        <h2 class="chatTitle">Enter a chat room:</h2>
+        <input id="room-name-input" type="text" size="100"><br><br>
+        <input id="room-name-submit" type="button" value="Enter"><br><br>
+        
+        <script>
+            document.querySelector('#room-name-input').focus();
+            document.querySelector('#room-name-input').onkeyup = function(e) {
+                if (e.keyCode === 13) {  // Enter key
+                    document.querySelector('#room-name-submit').click();
+                }
+            };
+            document.querySelector('#room-name-submit').onclick = function(e) {
+                var roomName = document.querySelector('#room-name-input').value;
+                window.location.href = "/chat/" + roomName + "/";
+            };
+        </script>
+        <a href="{% url 'home' %}">Back to home</a><br><br>
+        <h2 class="chatTitle">Past chats:</h2>
+        <ul>
+            {% for chat in chatMessage %}
+                <li class="chatList">{{ chat.room_name }}</li>
+            {% empty %}
+                <p>No past chats</p>
+            {% endfor %}
+        </ul>
+</body>
+</html>

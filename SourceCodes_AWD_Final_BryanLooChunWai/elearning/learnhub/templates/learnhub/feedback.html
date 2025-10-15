@@ -1,0 +1,39 @@
+{% extends "./base.html" %}
+{% block content %}
+<head><title>Feedback Page</title></head>
+<div class="segment">
+    {% if messages %}
+        {% for message in messages %}
+            <p style="color: green;">{{ message }}</p>
+        {% endfor %}
+    {% endif %}
+    {% if user.is_authenticated and user.learnhubuser.is_student %}
+    <form method="post" class="pageTitle">
+        {% csrf_token %}
+        <strong><label for="course">Select Course:</label></strong><br>
+        <select name="course" required>
+            {% for course in courses %}
+                <option value="{{ course.id }}">{{ course.name }}</option>
+            {% endfor %}
+        </select><br><br><br>
+        <strong><label for="comment">Feedback:</label></strong><br>
+        <textarea name="comment" rows="3" cols="50" required></textarea><br><br>
+        <button type="submit">submit</button><br><br>
+    </form>
+    {% endif %}
+    <h2>Course feedback</h2>
+    <ul class="resource-list">
+        {% for feedback in feedbacks %}
+            <li class="resource-item">
+                <div class="resource-content">
+                    <span class="resource-title"><strong>{{ feedback.course.name }}</strong></span>
+                    <p class="resource-description">{{ feedback.comment }}</p>
+                </div>
+                <span class="resource-uploaded">{{ feedback.created_at }}</span>
+            </li>
+        {% empty %}
+            <p>No feedback added yet.</p>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

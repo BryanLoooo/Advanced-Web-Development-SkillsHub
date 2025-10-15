@@ -1,0 +1,11 @@
+{% extends "./base.html" %}
+{% block content %}
+<head><title>Confirm Deletion</title></head>
+<h1>Confirm Deletion</h1>
+<p>Are you sure you want to delete <strong>{{ object.username }}</strong>?</p>
+<form method="post">
+    {% csrf_token %}
+    <button type="submit" style="color: white; background-color: red; padding: 5px 10px;">Confirm Delete</button>
+</form>
+<a href="{% url 'admin_panel' %}" style="padding: 5px 10px; background-color: grey; color: white; text-decoration: none;">Cancel</a>
+{% endblock %}

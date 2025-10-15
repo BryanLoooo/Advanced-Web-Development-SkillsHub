@@ -1,0 +1,33 @@
+{% extends "./base.html" %}
+{% block content %}
+<head><title>{{ profile_user.user.username }}'s Profile</title></head>
+<div class="segment">
+    <h1 class="pageTitle">{{ profile_user.user.username }}'s Profile</h1>
+    <!-- Profile Picture -->
+    {% if profile_user.profile_picture %}
+        <p><strong>Profile Picture:</strong></p>
+        <img src="{{ profile_user.profile_picture.url }}" alt="Profile Picture" width="150">
+    {% else %}
+        <p>No profile picture available.</p>
+    {% endif %}
+    <!-- Basic User Information -->
+    <p><strong>Username:</strong> {{ profile_user.user.username }}</p>
+    <p><strong>Email:</strong> {{ profile_user.user.email }}</p>
+    <p><strong>First Name:</strong> {{ profile_user.user.first_name }}</p>
+    <p><strong>Last Name:</strong> {{ profile_user.user.last_name }}</p>
+    <!-- Role -->
+    <p><strong>Role:</strong> 
+        {% if profile_user.is_student %}
+            Student
+        {% elif profile_user.is_teacher %}
+            Teacher
+        {% else %}
+            Not specified
+        {% endif %}
+    </p>
+    <!-- Organisation -->
+    {% if profile_user.organisation %}
+        <p><strong>Organisation:</strong> {{ profile_user.organisation }}</p>
+    {% endif %}
+</div>
+{% endblock %}

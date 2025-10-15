@@ -1,0 +1,351 @@
+{% load django_bootstrap5 %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        /* general html tag styling */
+        body{
+            background-color:#121212;
+            margin: 0;
+            padding: 0;
+            width: 100vw;
+        }
+        h1, h2, p, label, strong{
+            color: #EAEAEA;
+        }
+        table{
+            background-color: white;
+            width: 100vw;
+        }
+        thead{
+            background-color: black;
+            color: white;
+        }
+        input, select, textarea {
+            width: 60%;
+            padding: 5px;
+            background-color: white;
+            flex: 1;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        button{
+            background-color: #8A2BE2;
+            color: #EAEAEA;
+        }
+
+        /* custom styling */
+        .scroll-text {
+            position: relative;
+            transform: translateY(0px);
+            transition: transform 0.2s ease-out;
+        }
+        .banner{
+            width:100vw;
+            height: auto;
+        }
+        .segment{
+            padding-left: 50px;
+        }
+        .pageTitle{
+            padding-top: 50px;
+        }
+        .enrolledList .chatList{
+            color:white;
+        }
+        .courseTitle .courseDescription .courseContent{
+            padding-left: 50px;
+            padding-top: 50px;
+        }
+
+        /* home page introductory segment styling */
+        .introductory{
+            background-color: black;
+            width:100vw;
+            height:600px;
+        }
+        .introductorytext{
+            text-align: center;
+            padding-top: 50px;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+        }
+        .welcome {
+            margin-left: auto;
+        }
+
+        /* navigation bar styling for unauthorized users*/
+        .navbar-nav {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+        }
+        .nav-center {
+            flex: 3;
+            display: flex;
+            justify-content:end;
+        }
+        .navbar-nav .nav-item {
+            margin: 0 10px;
+        }
+        .auth-links {
+            flex: 1;
+        }
+        .auth-links .navbar-nav {
+            justify-content: flex-start;
+        }
+
+        /* navigation bar styling */
+        .navbar {
+            background-color: #8A2BE2;
+        }
+        .navbar-nav .nav-link {
+            color: #EAEAEA;
+            padding: 10px 15px;
+            text-decoration: none;
+            transition: all 0.3s ease-in-out;
+        }
+        .navbar-nav .nav-link:hover {
+            color: #00D1FF !important;
+            text-decoration: none;
+            box-shadow: 0px 0px 10px rgba(0, 209, 255, 0.5);
+        }
+        .navbar-nav .nav-item {
+            margin-right: 10px;
+        }
+        .navbar-nav .nav-link.disabled {
+            color: gray !important;
+        }
+
+        /* list of updates segment styling */
+        .update-item {
+            display: flex;
+            align-items: center;
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            background-color: black;
+            width:500px;
+        }
+        .update-image {
+            max-width: 150px;
+            height: auto;
+            margin-right: 20px;
+            border-radius: 3px;
+        }
+        .update-text {
+            flex: 1;
+        }
+        .update-text p {
+            margin: 5px 0;
+        }
+
+        /* list of resources segment styling */
+        .resourceTitle{
+            padding: 50px;
+        }
+        .resource-list {
+            list-style: none;
+            padding: 0;
+        }
+        .addResourceLink{
+            padding-left: 50px;
+        }
+        .resource-item {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: flex-start;
+            border: 2px solid black;
+            padding: 10px;
+            margin: 10px 0;
+            background-color: black;
+        }
+        .resource-content {
+            display: flex;
+            flex-direction: column;
+        }
+        .resource-title {
+            font-weight: bold;
+            text-align: left;
+        }
+        .resource-description {
+            font-size: 14px;
+            color: white;
+            margin: 5px 0;
+        }
+        .resource-uploaded {
+            font-size: 12px;
+            color: white;
+            text-align: right;
+        }
+        .resource-link {
+            padding-top: 5px;
+        }
+        .resource-link a {
+            text-decoration: none;
+            color: red;
+            font-weight: bold;
+        }
+        .resource-link a:hover {
+            text-decoration: underline;
+        }
+
+        /* list of notifications segment styling */
+        .notification-list {
+            list-style: none;
+            padding: 0;
+        }
+        .notification-item {
+            border: 2px solid white;
+            padding: 10px;
+            margin: 10px 0;
+            background-color: #f9f9f9;
+        }
+        .notification-item p {
+            margin: 0;
+        }
+        .notification-item a {
+            text-decoration: none;
+            color: white;
+            font-weight: bold;
+        }
+        .notification-item a:hover {
+            text-decoration: underline;
+        }
+        .notifications-container {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            width: 2010px;
+        }
+        .notification-section {
+            flex: 1;
+            max-height: 400px;
+            overflow-y: auto;
+            background: #1a1a1a;
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+        }
+        .notification-item {
+            background-color: black;
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        .notification-item button, .update-item button {
+            background-color: #8A2BE2;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        
+        /* login page styling */
+        .login-page {
+            background-image: url('../../../images/banner.png');
+            background-size: cover;
+            height: 100vh;
+            width:100vw;;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 5%;
+        }
+        .login-container {
+            background: black;
+            padding: 20px 40px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            width: 600px;
+            border-radius: 8px;
+        }
+        .form-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .form-label {
+            width: 100px;
+            font-weight: bold;
+            text-align: right;
+            margin-right: 10px;
+        }
+        .input-field {
+            flex: 1;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .submit-btn {
+            width: 100%;
+            padding: 10px;
+            background-color: #8A2BE2;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        /* registration page styling */
+        .register-page {
+            background-image: url('../../../images/banner.png');
+            background-size: cover;
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 5%;
+        }
+        .register-container {
+            background: black;
+            padding: 20px 40px;
+            border-radius: 8px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            width: 600px;
+        }
+        .form-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .form-label {
+            width: 120px;
+            font-weight: bold;
+            text-align: right;
+            margin-right: 10px;
+        }
+        .submit-btn {
+            width: 100%;
+            padding: 10px;
+            background-color: #8A2BE2 ;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .form-group {
+            display: flex;
+            justify-content: space-between;
+            align-items:flex-start;
+            margin-bottom: 10px;
+            width: 100%;
+        }
+        .form-label {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>

@@ -1,0 +1,15 @@
+{% extends "./base.html" %}
+{% block content %}
+<head><title>Courses Page</title></head>
+<div class="segment">
+    <h1 class="pageTitle">Courses</h1>
+    <p>Welcome to the Courses page!</p>
+    <ul>
+        {% for course in courses %}
+            <li><a href="{% url 'course_detail' course.id %}">{{ course.name }}</a></li>
+        {% empty %}
+            <p>No courses available.</p>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

@@ -1,0 +1,92 @@
+{% extends "./base.html" %}
+{% block content %}
+<head><title>Home Page</title></head>
+<script>
+    window.addEventListener("scroll", function () {
+        let scrollY = window.scrollY;
+        document.querySelectorAll(".scroll-text").forEach((el) => {
+            el.style.transform = `translateY(${scrollY * 0.2}px)`;
+        });
+    });
+</script>
+<img src="../../../images/banner.png" alt="Logo" class="banner">
+<div class="introductory">
+    {% if user.is_authenticated %}
+        <h1 class="introductorytext scroll-text">Welcome {{ user.username }} !</h1>
+    {% endif %}
+    <p class="introductorytext scroll-text">
+        Skill Hub, the ultimate e-learning hub for aspiring web developers. Whether you're a complete beginner or a coding <br><br>
+        enthusiast leveling up your skills, we’ve designed an interactive, hands-on learning experience to take you from <br><br>
+        theory to real-world application.Build. Innovate. Dominate. Dive into cutting-edge frontend, backend, and full-stack <br><br>
+        development courses, explore real-world projects, and sharpen your skills with expert guidance—all in a sleek, futuristic <br><br>
+        learning environment built for the next generation of developers. Ready to code your future? Let's get started.
+    </p>
+</div>
+<div class="notifications-container">
+    <!-- Enrollment Notifications for Teachers -->
+    {% if user.is_authenticated and user.learnhubuser.is_teacher %}
+        <div class="notification-section">
+            <h2>New Enrollments</h2>
+            {% for notification in enrollment_notifications %}
+                <div class="notification-item">
+                    <p><strong>{{ notification.student.username }}</strong> enrolled in <strong>{{ notification.course.name }}</strong></p>
+                    <form method="post" action="{% url 'mark_enrollment_as_read' notification.id %}">
+                        {% csrf_token %}
+                        <button type="submit">Mark as Read</button>
+                    </form>
+                </div>
+            {% empty %}
+                <p>No new enrollments.</p>
+            {% endfor %}
+        </div>
+    {% endif %}
+    <!-- New Resources Notifications for Students -->
+    {% if user.is_authenticated and user.learnhubuser.is_student %}
+        <div class="notification-section">
+            <h2>New Course Resources</h2>
+            {% for notification in resource_notifications %}
+                <div class="notification-item">
+                    <p>A new resource <strong>{{ notification.resource.title }}</strong> was added to <strong>{{ notification.resource.course.name }}</strong>.</p>
+                    <p>Click <a href="{{ notification.resource.file.url }}" download>here</a> to download</p>
+                    <form method="post" action="{% url 'mark_resource_as_read' notification.id %}">
+                        {% csrf_token %}
+                        <button type="submit">Mark as Read</button>
+                    </form>
+                </div>
+            {% empty %}
+                <p>No new resources available.</p>
+            {% endfor %}
+        </div>
+    {% endif %}
+    <!-- Status Updates -->
+    <div class="notification-section">
+        <h2>Unread Updates</h2>
+        {% for update in updates %}
+            <div class="update-item">
+                {% if update.image %}
+                    <img src="{{ update.image.url }}" alt="Status Image" class="update-image">
+                {% endif %}
+                <div class="update-text">
+                    <strong>Created by:</strong> <p>{{ update.user.username }}</p>
+                    <strong>Date and time:</strong> <p>{{ update.created_at|date:"F j, Y, g:i a" }}</p>
+                    <strong>Details:</strong> <p>{{ update.content }}</p>
+                </div>
+            </div>
+        {% empty %}
+            <p>No unread updates.</p>
+        {% endfor %}
+    </div>
+</div>
+<div class="segment">
+    {% if user.is_authenticated %}
+        <h2>Any new posts?</h2>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Post</button>
+        </form>
+    {% else %}
+        <p><a href="{% url 'login' %}">Log in</a> to post a status update.</p>
+    {% endif %}
+</div>
+{% endblock %}

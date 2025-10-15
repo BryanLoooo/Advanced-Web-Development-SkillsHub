@@ -1,0 +1,50 @@
+<nav class="navbar navbar-expand-md sticky-top">
+    <div class="w-100 d-flex justify-content-between align-items-center">
+        <div class="auth-links">
+            {% if not user.is_authenticated %}
+                <ul class="navbar-nav">
+                    <li class="nav-item active"><a class="nav-link" href="{% url 'register' %}">Register</a></li>
+                    <li class="nav-item active"><a class="nav-link" href="{% url 'login' %}">Login</a></li>
+                </ul>
+            {% endif %}
+        </div>
+        <div class="nav-center">
+            <ul class="navbar-nav" id="navigation">
+                {% if user.is_authenticated %}
+                    <li class="nav-item active"><a class="nav-link" href="{% url 'home' %}">Home</a></li>
+                    {% if user.is_authenticated and user.learnhubuser.is_teacher %}
+                    <li class="nav-item active"><a class="nav-link" href="{% url 'admin_panel' %}">Admin Panel</a></li>
+                    {% else %}
+                    {% endif %}
+                    <li class="nav-item active"><a class="nav-link" href="{% url 'chat' %}">Chat</a></li>
+                    <li class="nav-item active"><a class="nav-link" href="{% url 'profile' request.user.username %}">Profile</a></li>
+                    <li class="nav-item active">
+                        {% if courses.exists %}
+                        <a class="nav-link" href="{% url 'course_detail' courses.first.id %}">Course Details</a>
+                        {% else %}
+                        <a class="nav-link" href="#">No Courses Available</a>
+                        {% endif %}
+                    </li>
+                    <li class="nav-item active"><a class="nav-link" href="{% url 'courses' %}">Courses</a></li>
+                    {% if user.is_authenticated and user.learnhubuser.is_teacher %}
+                    <li class="nav-item active">
+                        <a class="nav-link" href="{% url 'create_course' %}">Create Course</a>
+                    </li>
+                    {% else %}
+                    {% endif %}
+                    <li class="nav-item active">
+                        <a class="nav-link" href="{% url 'feedback' %}">Feedback</a>
+                    </li>
+                    {% if user.is_authenticated and user.learnhubuser.is_teacher %}
+                    <li class="nav-item active">
+                        <a class="nav-link" href="{% url 'browse_profiles' %}">Browse Profiles</a>
+                    </li>
+                    {% else %}
+                    {% endif %}
+                    <li class="nav-item active"><a class="nav-link" href="{% url 'updates' %}">Updates</a></li>
+                    <li class="nav-item active"><a class="nav-link" href="{% url 'logout' %}">Logout</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+</nav>

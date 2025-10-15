@@ -1,0 +1,30 @@
+{% extends "./base.html" %}
+{% block content %}
+<head><title>Updates</title></head>
+<div class="segment">
+    <h1 class="pageTitle">All Updates</h1>
+    {% for update in updates %}
+        <div class="update-item">
+            {% if update.image %}
+                <img src="{{ update.image.url }}" alt="Status Image" class="update-image">
+            {% endif %}
+            <div class="update-text">
+                <strong>Created by:</strong> <p>{{ update.user.username }}</p>
+                <strong>Date and time:</strong> <p>{{ update.created_at|date:"F j, Y, g:i a" }}</p>
+                <strong>Details:</strong> <p>{{ update.content }}</p>
+            </div>
+            {% if user.is_authenticated %}
+                {% if not update.read %}
+                <form method="post" action="{% url 'mark_as_read' update.id %}">
+                    {% csrf_token %}
+                    <button type="submit">Mark as Read</button>
+                </form>
+                {% else %}
+                {% endif %}
+            {% endif %}
+        </div>
+    {% empty %}
+        <p>No updates yet.</p>
+    {% endfor %}
+</div>
+{% endblock %}
